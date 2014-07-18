@@ -2,6 +2,7 @@ package RADSUnpacker;
 
 import RADSSoundPatcher.Misc.ArrayUtils;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,6 +12,8 @@ import java.util.List;
 /**
  * Created by philipp on 18.07.2014.
  */
+
+//Todo: Gaps betweem Entrys
 public class WWiseArchive {
 
 
@@ -28,13 +31,17 @@ public class WWiseArchive {
             buffer.append((char) ((int) (t) & 0xFF));
 
         this.word = buffer.toString();
-        int headerEnd = word.indexOf("RIFF") - 1;
+        int headerEnd = word.indexOf("RIFF");
         this.header = new byte[headerEnd];
         ArrayUtils.insertArrayInAnotherArray(header, content, 0, headerEnd, 0);
 
         int[] entrys = searchEntrys("RIFF");
         for(int r : entrys)
+        {
+            System.out.println(r);
             this.entrys.add(new WWiseArchiveEntry(content,r));
+        }
+
 
     }
 
@@ -42,6 +49,7 @@ public class WWiseArchive {
 
 
         WWiseArchive a = new WWiseArchive("lol");
+        a.saveFile();
 
 
     }
@@ -59,6 +67,35 @@ public class WWiseArchive {
 
         return result;
     }
+
+    public void saveFile() throws IOException {
+        List<byte[]> result = new ArrayList<byte[]>();
+        result.add(this.header);
+
+        for(int i = 0; i < entrys.size();i++)
+        {
+
+            result.addAll(entrys.get(i).getBytes());
+
+
+        }
+
+
+
+        FileOutputStream stream = new FileOutputStream("test.wwiseFile");
+       int i = 0;
+        for(byte[] r : result)
+        {
+            stream.write(r);
+            i++;
+        }
+        System.out.println(i);
+        stream.close();
+
+
+    }
+
+
 }
 
 

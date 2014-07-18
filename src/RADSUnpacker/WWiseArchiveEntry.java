@@ -5,6 +5,8 @@ import RADSSoundPatcher.Misc.ArrayUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by philipp on 16.07.2014.
@@ -33,6 +35,25 @@ public class WWiseArchiveEntry {
     private LittleEndian subChunk2Size;
     private byte[] data;
 
+    public int getTest() {
+        return test;
+    }
+
+    //Test
+    private int test;
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public LittleEndian getChunkID() {
+        return chunkID;
+    }
+
+    public LittleEndian getChunkSize() {
+        return chunkSize;
+    }
+
     public WWiseArchiveEntry(byte[] contentAsArray, int start)
     {
         //Chunksize einschließlich mit WAVE offset(Format)
@@ -51,20 +72,21 @@ public class WWiseArchiveEntry {
         this.bitsPerSample = new LittleEndian(contentAsArray,start+34,2);
         this.subChunk2ID = new LittleEndian(contentAsArray,start+36,4);
         this.subChunk2Size = new LittleEndian(contentAsArray,start+40,4);
-        this.data = new byte[(int)chunkSize.getContent()];
-        ArrayUtils.insertArrayInAnotherArray(this.data, contentAsArray, 0, (int) chunkSize.getContent(), start+8);
-        debugOutput();
+        this.data = new byte[(int)chunkSize.getContent() - 36];
+        this.test = (int)this.chunkSize.getContent() + start + 8;
+
+        ArrayUtils.insertArrayInAnotherArray(this.data, contentAsArray, 0, (int) chunkSize.getContent()-36, start+44);
+        debugOutput(start);
 
     }
 
     public static void main(String[] args) throws IOException {
 
         WWiseArchiveEntry wWiseArchive = new WWiseArchiveEntry( Files.readAllBytes(Paths.get("test.wwise")),0);
-        wWiseArchive.debugOutput();
+        //wWiseArchive.debugOutput();
     }
 
-    public void debugOutput()
-    {
+    public void debugOutput(int start) {
         System.out.println("chunkID       :"+this.chunkID.getString());
         System.out.println("chunkSize     :"+this.chunkSize.getContent());
         System.out.println("format        :"+this.format.getString());
@@ -78,8 +100,34 @@ public class WWiseArchiveEntry {
         System.out.println("bitsPerSample :"+this.bitsPerSample.getContent());
         System.out.println("subChunk2ID   :"+this.subChunk2ID.getString());
         System.out.println("subChunk2Size :"+this.subChunk2Size.getContent());
+        System.out.println("CONTENT SIZE: " + (this.data.length) + " <> CHUNSIZE: " + (this.chunkSize.getContent()-36));
         System.out.println("");
 
+    }
+
+    public void repack(String filename)
+    {
+
+    }
+
+    public List<byte[]> getBytes()
+    {
+        List<byte[]> result = new ArrayList<byte[]>();
+        result.add(this.chunkID.getRawContent());
+        result.add(this.chunkSize.getRawContent());
+        result.add(this.format.getRawContent());
+        result.add(this.subchunkID.getRawContent());
+        result.add(this.subchunkSize.getRawContent());
+        result.add(this.audioFormat.getRawContent());
+        result.add(this.numChannels.getRawContent());
+        result.add(this.sampleRate.getRawContent());
+        result.add(this.byteRate.getRawContent());
+        result.add(this.blockAlign.getRawContent());
+        result.add(this.bitsPerSample.getRawContent());
+        result.add(this.subChunk2ID.getRawContent());
+        result.add(this.subChunk2Size.getRawContent());
+        result.add(this.data);
+        return result;
     }
 
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * User: philipp.hentschel
+ * User: philipp
  * Date: 16.07.14
  * Time: 17:18
  * To change this template use File | Settings | File Templates.

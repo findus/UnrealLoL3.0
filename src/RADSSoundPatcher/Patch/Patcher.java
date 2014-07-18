@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
- * User: philipp.hentschel
+ * User: philipp
  * Date: 18.10.13
  * Time: 08:59
  * To change this template use File | Settings | File Templates.
