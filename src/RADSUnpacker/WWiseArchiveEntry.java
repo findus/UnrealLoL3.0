@@ -33,32 +33,33 @@ public class WWiseArchiveEntry {
     private LittleEndian subChunk2Size;
     private byte[] data;
 
-    public WWiseArchiveEntry(byte[] contentAsArray)
+    public WWiseArchiveEntry(byte[] contentAsArray, int start)
     {
         //Chunksize einschließlich mit WAVE offset(Format)
 
         //Either I dont geht the Header Information or some values a not correct (or fake data)
-        this.chunkID = new LittleEndian(contentAsArray,0,4);
-        this.chunkSize = new LittleEndian(contentAsArray,4,4);
-        this.format = new LittleEndian(contentAsArray,8,4);
-        this.subchunkID = new LittleEndian(contentAsArray,12,4);
-        this.subchunkSize = new LittleEndian(contentAsArray,16,4);
-        this.audioFormat = new LittleEndian(contentAsArray,20,2);
-        this.numChannels = new LittleEndian(contentAsArray,22,2);
-        this.sampleRate = new LittleEndian(contentAsArray,24,4);
-        this.byteRate = new LittleEndian(contentAsArray,28,4);
-        this.blockAlign = new LittleEndian(contentAsArray,32,2);
-        this.bitsPerSample = new LittleEndian(contentAsArray,34,2);
-        this.subChunk2ID = new LittleEndian(contentAsArray,36,4);
-        this.subChunk2Size = new LittleEndian(contentAsArray,40,4);
+        this.chunkID = new LittleEndian(contentAsArray,start,4);
+        this.chunkSize = new LittleEndian(contentAsArray,start+4,4);
+        this.format = new LittleEndian(contentAsArray,start+8,4);
+        this.subchunkID = new LittleEndian(contentAsArray,start+12,4);
+        this.subchunkSize = new LittleEndian(contentAsArray,start+16,4);
+        this.audioFormat = new LittleEndian(contentAsArray,start+20,2);
+        this.numChannels = new LittleEndian(contentAsArray,start+22,2);
+        this.sampleRate = new LittleEndian(contentAsArray,start+24,4);
+        this.byteRate = new LittleEndian(contentAsArray,start+28,4);
+        this.blockAlign = new LittleEndian(contentAsArray,start+32,2);
+        this.bitsPerSample = new LittleEndian(contentAsArray,start+34,2);
+        this.subChunk2ID = new LittleEndian(contentAsArray,start+36,4);
+        this.subChunk2Size = new LittleEndian(contentAsArray,start+40,4);
         this.data = new byte[(int)chunkSize.getContent()];
-        ArrayUtils.insertArrayInAnotherArray(this.data, contentAsArray, 0, (int) chunkSize.getContent(), 8);
+        ArrayUtils.insertArrayInAnotherArray(this.data, contentAsArray, 0, (int) chunkSize.getContent(), start+8);
+        debugOutput();
 
     }
 
     public static void main(String[] args) throws IOException {
 
-        WWiseArchiveEntry wWiseArchive = new WWiseArchiveEntry( Files.readAllBytes(Paths.get("test.wwise")));
+        WWiseArchiveEntry wWiseArchive = new WWiseArchiveEntry( Files.readAllBytes(Paths.get("test.wwise")),0);
         wWiseArchive.debugOutput();
     }
 
@@ -77,6 +78,7 @@ public class WWiseArchiveEntry {
         System.out.println("bitsPerSample :"+this.bitsPerSample.getContent());
         System.out.println("subChunk2ID   :"+this.subChunk2ID.getString());
         System.out.println("subChunk2Size :"+this.subChunk2Size.getContent());
+        System.out.println("");
 
     }
 
