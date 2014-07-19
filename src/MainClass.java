@@ -18,6 +18,7 @@ public class MainClass {
         if (args.length == 0) {
             System.out.println(
                     "RADSSoundpatcher for League of Legends [v." + Gui.Version + "] \n" +
+
                             "Available Commands: Unreal.jar [-Path] [-Soundpack] [-Region] [-Unpatch] [-Gui]\n" +
                             "                               [-Swapmode]\n\n" +
                             "Options:\n" +
@@ -32,7 +33,7 @@ public class MainClass {
                             "              3: Swap Announcers\n" +
                             "   -Gui       Launches Gui\n\n" +
                             "Example: java -jar unreal.jar -Path \"C:\\Riot Games\\League of Legends\"\n" +
-                            "         -Soundpack \"Unreal Tournament\" -Region \"English\""
+                            "         -Soundpack \"Unreal Tournament\" -Region \"English\"\n"
             );
         } else {
             System.out.println("RADSSoundpatcher for League of Legends [v." + Gui.Version + "]");

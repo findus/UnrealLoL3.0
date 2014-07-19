@@ -78,7 +78,6 @@ public class Person extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);    //To change body of overridden methods use File | Settings | File Templates.
-
                 Misc.OpenLink("http://www.lolking.net/summoner/euw/" + id);
             }
 
@@ -91,7 +90,6 @@ public class Person extends JFrame {
             img = ImageIO.read(new URL("http://avatar.leagueoflegends.com/euw/" + naem + ".png"));
         } catch (IOException e) {
             logger.error("No Connection available");
-
         }
         return img;
 
