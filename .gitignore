@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -59,7 +58,6 @@ ressources/
 out/
 .settings/
 bin/
-/
 UnrealLoL2.0.iml
 Unreal.jar_Downloaded
 TODO

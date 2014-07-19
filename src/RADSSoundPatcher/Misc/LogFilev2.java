@@ -1,7 +1,5 @@
 package RADSSoundPatcher.Misc;
 
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.WinBase;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -30,20 +28,7 @@ public class LogFilev2 {
         }
     }
 
-    private static void winapicalls() {
-        Kernel32 INSTANCE = Kernel32.INSTANCE;
 
-        WinBase.SYSTEM_INFO sysinfo = new WinBase.SYSTEM_INFO();
-        System.out.println(sysinfo);
-        if (INSTANCE != null) {
-            INSTANCE.GetSystemInfo(sysinfo);
-            //System.out.println(sysinfo.dwProcessorType);
-        }
-    }
-
-    public static void main(String[] args) {
-        winapicalls();
-    }
 
 
 }
