@@ -13,7 +13,8 @@ import java.util.List;
  * Created by philipp on 18.07.2014.
  */
 
-//Todo: Gaps betweem Entrys
+
+//Todo: The Archive has different sized gaps between the single riff archives. (ArchiveEntry chunkSize + 2 Offsets is the length of the entry)
 public class WWiseArchive {
 
 
