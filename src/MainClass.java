@@ -1,6 +1,5 @@
 import RADSSoundPatcher.GUI.Gui;
 import RADSSoundPatcher.Misc.Misc;
-import RADSSoundPatcher.Patch.Patcher;
 import org.apache.log4j.Logger;
 
 /**
@@ -50,21 +49,21 @@ public class MainClass {
                 if (gui != -1) {
                     System.out.println("- Gui Mode...");
                     Misc.SelfTest();
-                    Gui.main(args);
+                    //Gui.main(args);
                 } else if (path != -1 && region != -1 && unpatch != -1) {
-                    Patcher job = new Patcher(args[path + 1].replace("\"", ""), args[region + 1].replace("\"", ""));
-                    job.DeleteVOBankBackup();
+                    //Patcher job = new Patcher(args[path + 1].replace("\"", ""), args[region + 1].replace("\"", ""));
+                    //job.DeleteVOBankBackup();
                 } else if (path != -1 && soundpack != -1 && region != -1 && unpatch == -1) {
 
                     Misc.SelfTest();
                     if (swapmode != -1) {
-                        Patcher job = new Patcher(args[path + 1].replace("\"", ""), args[soundpack + 1].replace("\"", ""), args[region + 1].replace("\"", ""), Integer.valueOf(args[swapmode + 1].replace("\"", "")));
-                        job.PrepareSoundpackforPatch();
+                        //Patcher job = new Patcher(args[path + 1].replace("\"", ""), args[soundpack + 1].replace("\"", ""), args[region + 1].replace("\"", ""), Integer.valueOf(args[swapmode + 1].replace("\"", "")));
+                       // job.PrepareSoundpackforPatch();
                     } else {
 
 
-                        Patcher job = new Patcher(args[path + 1].replace("\"", ""), args[soundpack + 1].replace("\"", ""), args[region + 1].replace("\"", ""), 0);
-                        job.PrepareSoundpackforPatch();
+                        //Patcher job = new Patcher(args[path + 1].replace("\"", ""), args[soundpack + 1].replace("\"", ""), args[region + 1].replace("\"", ""), 0);
+                        //job.PrepareSoundpackforPatch();
                     }
 
 

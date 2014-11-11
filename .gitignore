@@ -22,7 +22,8 @@ hs_err_pid*
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -34,14 +35,14 @@ Icon
 # Windows
 # =========================
 
-# Windows image file caches
+# Windows image wpkFile caches
 Thumbs.db
 ehthumbs.db
 
-# Folder config file
+# Folder config wpkFile
 Desktop.ini
 
-# Recycle Bin used on file shares
+# Recycle Bin used on wpkFile shares
 $RECYCLE.BIN/
 
 # Windows Installer files

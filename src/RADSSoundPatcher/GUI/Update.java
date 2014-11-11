@@ -71,8 +71,8 @@ public class Update extends JDialog {
         setTitle("Updater");
 
         setResizable(false);
-        Point l = Gui.dialog.getLocation();
-        setBounds(l.x, l.y, 441, 207);
+        //Point l = Gui.dialog.getLocation();
+        //setBounds(l.x, l.y, 441, 207);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setForeground(Color.LIGHT_GRAY);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

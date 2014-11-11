@@ -4,7 +4,6 @@ package RADSSoundPatcher.Find;
 import RADSSoundPatcher.GUI.Gui;
 import RADSSoundPatcher.Misc.Misc;
 import RADSSoundPatcher.Misc.OperatingSystem;
-import RADSSoundPatcher.Patch.PatchException;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -171,9 +170,9 @@ public class Tools {
      * @throws IOException
      * @throws SAXException
      * @throws URISyntaxException
-     * @throws PatchException
      */
-    public static ArrayList GetRegionInformation(String Region) throws ParserConfigurationException, IOException, SAXException, URISyntaxException, PatchException {
+    public static String GetRegionInformation(String Region) throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
+        String Regionz = null;
         ArrayList<String> List = new ArrayList<String>();
         Document doc;
         File Xml = new File("Regions.xml");
@@ -205,22 +204,15 @@ public class Tools {
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                String Regionz = eElement.getElementsByTagName("Region").item(0).getTextContent();
-                String Constructor = eElement.getElementsByTagName("Constructor").item(0).getTextContent();
-                String VOBank = eElement.getElementsByTagName("VOBank").item(0).getTextContent();
-                String RegionFolder = eElement.getElementsByTagName("RegionFolder").item(0).getTextContent();
+                Regionz = eElement.getElementsByTagName("Region").item(0).getTextContent();
 
-                List.clear();
-                List.add(Regionz);
-                List.add(Constructor);
-                List.add(VOBank);
-                List.add(RegionFolder);
             }
         }
         if (List.size() == 0) {
             List = null;
-            throw new PatchException("- ERROR: Unsupported Region! (" + Region + ")");
+            // throw new PatchException("- ERROR: Unsupported Region! (" + Region + ")");
         }
-        return List;
+        return Regionz;
     }
+
 }

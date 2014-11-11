@@ -67,8 +67,8 @@ public class Changelog extends JDialog {
         setResizable(false);
         setTitle("Changelog");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Point l = Gui.dialog.getLocation();
-        setBounds(l.x, l.y, 783, 563);
+        //oint l = Gui.dialog.getLocation();
+        //setBounds(l.x, l.y, 783, 563);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);

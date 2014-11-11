@@ -58,8 +58,8 @@ public class Info extends JDialog {
         setIconImage(Toolkit.getDefaultToolkit().getImage("RADSSoundPatcher/Pictures/Monsoon.jpg"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        Point l = Gui.dialog.getLocation();
-        setBounds(l.x, l.y, 485, 315);
+        //Point l = Gui.dialog.getLocation();
+        //setBounds(l.x, l.y, 485, 315);
         contentPane = new JPanel();
         contentPane.setBackground(Gui.myColor);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

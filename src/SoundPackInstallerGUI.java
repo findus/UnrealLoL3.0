@@ -1,5 +1,7 @@
 import RADSSoundPatcher.GUI.Gui;
-import RADSSoundPatcher.Misc.Misc;
+import RADSSoundPatcher.Manager.ArchiveManager;
+
+import java.io.File;
 
 
 /**
@@ -12,7 +14,9 @@ import RADSSoundPatcher.Misc.Misc;
 public class SoundPackInstallerGUI {
 
     public static void main(String[] args) throws Throwable {
-        Misc.SelfTest();
-        Gui.main(args);
+        //Misc.SelfTest();
+        
+       ArchiveManager manager = new ArchiveManager(new File("C:/Riot Games/League of Legends/"),"English");
+       Gui gui = new Gui(manager);
     }
 }

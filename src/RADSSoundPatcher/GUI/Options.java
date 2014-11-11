@@ -2,17 +2,12 @@ package RADSSoundPatcher.GUI;
 
 import RADSSoundPatcher.Find.Tools;
 import RADSSoundPatcher.Misc.Misc;
-import RADSSoundPatcher.Patch.PatchException;
-import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 
@@ -58,8 +53,8 @@ public class Options extends JDialog {
 
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        Point l = Gui.dialog.getLocation();
-        setBounds(l.x, l.y, 426, 217);
+       // Point l = Gui.dialog.getLocation();
+        //setBounds(l.x, l.y, 426, 217);
         contentPane = new JPanel();
         contentPane.setBackground(Gui.myColor);
         contentPane.setForeground(Color.LIGHT_GRAY);
@@ -71,37 +66,7 @@ public class Options extends JDialog {
         btnOpenVobankfolder.setFont(new Font("SansSerif", Font.PLAIN, 10));
         btnOpenVobankfolder.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                String comboBoxx = null;
-                JComboBox box;
 
-                if (Gui.comboBox.isEnabled()) {
-                    comboBoxx = "comboBox";
-                    box = Gui.comboBox;
-                } else {
-                    comboBoxx = "comboBox_1";
-                    box = Gui.comboBox_1;
-                }
-                String Region2 = box.getSelectedItem().toString();
-                ArrayList XMArrayList = new ArrayList();
-                try {
-                    XMArrayList = Tools.GetRegionInformation(Region2);
-                } catch (ParserConfigurationException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (IOException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (SAXException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (URISyntaxException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (PatchException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                String Region = XMArrayList.get(0).toString();
-                String VOBankName = XMArrayList.get(2).toString();
-                String Region3 = Tools.GetNewestFolder(Gui.txtEnterYourLeague.getText(), Region, VOBankName);
-                String url = Gui.txtEnterYourLeague.getText().toString() + "\\RADS\\projects\\" + Region + "\\managedfiles\\" + Region3 + "\\Data\\Sounds\\FMOD";
-                Misc.OpenLink(url);
             }
         });
         btnOpenVobankfolder.setForeground(Color.LIGHT_GRAY);
@@ -118,37 +83,7 @@ public class Options extends JDialog {
         btnOpenLolfolder.setFont(new Font("SansSerif", Font.PLAIN, 10));
         btnOpenLolfolder.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                String comboBoxx = null;
-                JComboBox box;
 
-                if (Gui.comboBox.isEnabled()) {
-                    comboBoxx = "comboBox";
-                    box = Gui.comboBox;
-                } else {
-                    comboBoxx = "comboBox_1";
-                    box = Gui.comboBox_1;
-                }
-                String Region2 = box.getSelectedItem().toString();
-                ArrayList XMArrayList = new ArrayList();
-                try {
-                    XMArrayList = Tools.GetRegionInformation(Region2);
-                } catch (ParserConfigurationException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (IOException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (SAXException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (PatchException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                String Region = XMArrayList.get(0).toString();
-                String VOBankName = XMArrayList.get(2).toString();
-
-                String url = Gui.txtEnterYourLeague.getText().toString() + "\\";
-                Misc.OpenLink(url);
             }
         });
         btnOpenLolfolder.setForeground(Color.LIGHT_GRAY);
@@ -168,37 +103,7 @@ public class Options extends JDialog {
         btnOpenFilearchive.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                String comboBoxx = null;
-                JComboBox box;
 
-                if (Gui.comboBox.isEnabled()) {
-                    comboBoxx = "comboBox";
-                    box = Gui.comboBox;
-                } else {
-                    comboBoxx = "comboBox_1";
-                    box = Gui.comboBox_1;
-                }
-                String Region2 = box.getSelectedItem().toString();
-                ArrayList XMArrayList = new ArrayList();
-                try {
-                    XMArrayList = Tools.GetRegionInformation(Region2);
-                } catch (ParserConfigurationException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (IOException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (SAXException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (URISyntaxException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (PatchException e1) {
-                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                String Region = XMArrayList.get(0).toString();
-                String VOBankName = XMArrayList.get(2).toString();
-
-                String url = Gui.txtEnterYourLeague.getText().toString() + "\\RADS\\projects\\" + Region + "\\managedfiles\\";
-                Misc.OpenLink(url);
             }
         });
         JLabel dtrpnNotAvaiable = new JLabel();

@@ -4,6 +4,11 @@ import RADSSoundPatcher.Misc.Misc;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Philipp
@@ -14,9 +19,9 @@ import java.net.URISyntaxException;
 public class gui2 {
 
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException, URISyntaxException, ClassNotFoundException, InstantiationException, IllegalAccessException, SAXException, ParserConfigurationException, UnsupportedLookAndFeelException {
 
-        Misc.SelfTest();
-        Gui.main(args);
+        //Misc.SelfTest();
+       // Gui.main(args);
     }
 }
