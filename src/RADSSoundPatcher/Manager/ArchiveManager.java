@@ -90,6 +90,7 @@ public class ArchiveManager {
                 String filename;
 
 
+                //Dont know if I have to handle this this way, some users had troubles to install a mod on another Region if those files remains the same
                 for(File g : soundpackFolder.listFiles())
                 {
                     if (g.getName().endsWith("audio.wpk")) {
@@ -130,10 +131,16 @@ public class ArchiveManager {
 			if (name.equals(file.getName())) {
 				logger.info("File found in LoLClient: "
 						+ file.getWpkFile().getAbsolutePath());
-				if (!hasBackup(file))
-					createBackup(file);				
-				//Patchlogic
+				if (!hasBackup(file.getWpkFile()))
+					createBackup(file.getWpkFile());
+                if (!hasBackup(file.getBnkFile()))
+                    createBackup(file.getBnkFile());
+                if (!hasBackup(file.getEventFile()))
+                createBackup(file.getEventFile());
+                //Patchlogic
 				Misc.copyFile(installFile.getWpkFile(), file.getWpkFile());
+                Misc.copyFile(installFile.getBnkFile(), file.getBnkFile());
+                Misc.copyFile(installFile.getEventFile(), file.getEventFile());
 				//TODO Patchlogic
 				Date end = new Date();
 				logger.info("Patching Done :) (" + ((end.getTime()-start.getTime()) + "ms)"));
@@ -145,24 +152,36 @@ public class ArchiveManager {
 	}
 
 	public void deleteArchive(ArchiveFile file) throws IOException {
-		if (!hasBackup(file)) {
+		if (!hasBackup(file.getWpkFile())) {
 			logger.error("Can't delete wpkFile, no Backup available");
 		} else {
 			Misc.copyFile(new File(file.getWpkFile().getAbsoluteFile()+"_bak"), file.getWpkFile());
 		}
+
+        if (!hasBackup(file.getBnkFile())) {
+            logger.error("Can't delete bnkFile, no Backup available");
+        } else {
+            Misc.copyFile(new File(file.getBnkFile().getAbsoluteFile()+"_bak"), file.getBnkFile());
+        }
+
+        if (!hasBackup(file.getEventFile())) {
+            logger.error("Can't delete eventFilr, no Backup available");
+        } else {
+            Misc.copyFile(new File(file.getEventFile().getAbsoluteFile()+"_bak"), file.getEventFile());
+        }
 	}
 
-	private boolean hasBackup(ArchiveFile file) {
-		File backupFile = new File(file.getWpkFile().getAbsolutePath() + "_bak");
-		if (!backupFile.exists())
+	private boolean hasBackup(File file) {
+		File bak = new File(file.getAbsolutePath() + "_bak");
+		if (!bak.exists())
 			return false;
 		else
 			return true;
 	}
 
-	private void createBackup(ArchiveFile file) throws IOException {
-		Misc.copyFile(file.getWpkFile(), new File(file.getWpkFile().getAbsolutePath()
-				+ "_bak"));
+	private void createBackup(File file) throws IOException {
+		Misc.copyFile(file, new File(file.getAbsolutePath() + "_bak"));
+
 	}
 
 	public List<Soundpack> getSoundpacks() {

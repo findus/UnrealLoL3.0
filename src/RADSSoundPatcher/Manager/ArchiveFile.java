@@ -13,6 +13,7 @@ public class ArchiveFile {
     File eventFile;
     File bnkFile;
 
+
     public ArchiveFile(File wpkFile,File eventFile,File bnkFile)
     {
         this.wpkFile = wpkFile;
@@ -31,6 +32,23 @@ public class ArchiveFile {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+    public File getEventFile() {
+        return eventFile;
+    }
+
+    public void setEventFile(File eventFile) {
+        this.eventFile = eventFile;
+    }
+
+    public File getBnkFile() {
+        return bnkFile;
+    }
+
+    public void setBnkFile(File bnkFile) {
+        this.bnkFile = bnkFile;
+    }
 
 	public String getChampionname() {
 		return championname;

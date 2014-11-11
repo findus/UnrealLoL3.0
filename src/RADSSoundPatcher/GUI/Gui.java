@@ -532,10 +532,15 @@ public class Gui extends JFrame {
 						e1.printStackTrace();
 					}
 				}
-
-					
 			}
 		});
+
+        btnUnpatch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
 	}
 
 	public void updatewindow() {
