@@ -3,6 +3,9 @@ package RADSSoundPatcher.GUI;
 import RADSSoundPatcher.Manager.ArchiveManager;
 import RADSSoundPatcher.Manager.Soundpack;
 import RADSSoundPatcher.Misc.Misc;
+import RADSSoundPatcher.exception.AlreadyModdedException;
+
+import RADSSoundPatcher.exception.notModdedExcption;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -14,11 +17,13 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.xml.parsers.ParserConfigurationException;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
@@ -68,10 +73,10 @@ public class Gui extends JFrame {
 	private static JLabel lblPatchUnpatch;
 	private static JButton infoButton;
 	private static Logger logger = Logger.getRootLogger();
-	private SoundpackDisplayer soundpackView;
-	private static JScrollPane soundpackPane;
+	private static DefaultComboBoxModel model;
 
 	private ArchiveManager manager;
+	private JComboBox comboBox;
 
 	/**
 	 * Create the frame.
@@ -101,7 +106,7 @@ public class Gui extends JFrame {
 		this.addListener();
 
 		this.manager = manager;
-		RedirectOutputStream();
+		//RedirectOutputStream();
 
 		loadSoundpacks();
 
@@ -109,17 +114,14 @@ public class Gui extends JFrame {
 	}
 
 	private void loadSoundpacks() {
-		soundpackView.removeAll();
 		java.util.List<Soundpack> files = this.manager.getSoundpacks();
 		for (Soundpack file : files) {
-			try {
-				soundpackView.add(new SoundpackPreview(file));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			model.addElement(file);
+
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void initializeComponents() {
 		regionCombobox = new JComboBox<String>();
 		progressBar = new JProgressBar();
@@ -151,9 +153,9 @@ public class Gui extends JFrame {
 		separatorRight = new JSeparator();
 		lblPatchUnpatch = new JLabel();
 		infoButton = new JButton("Info");
-		soundpackPane = new JScrollPane();
-		soundpackPane.setBorder(BorderFactory.createLineBorder(Color.darkGray
-				.darker()));
+		model = new DefaultComboBoxModel();
+		comboBox = new JComboBox(model);
+
 		new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -404,19 +406,8 @@ public class Gui extends JFrame {
 		infoButton.setBounds(50, 259, 56, 23);
 		contentPane.add(infoButton);
 
-		soundpackPane.setPreferredSize(new Dimension(230, 50));
-		soundpackPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		soundpackPane.setBounds(181, 194, 230, 76);
-		contentPane.add(soundpackPane);
-
-		soundpackView = new SoundpackDisplayer();
-		
-		soundpackView.setBorder(new LineBorder(new Color(0, 0, 0)));
-		soundpackView.setAlignmentY(Component.TOP_ALIGNMENT);
-		soundpackView.setAlignmentX(Component.LEFT_ALIGNMENT);
-		soundpackPane.setViewportView(soundpackView);
-		soundpackView.setLayout(new BoxLayout(soundpackView, BoxLayout.Y_AXIS));
+		comboBox.setBounds(181, 194, 228, 25);
+		contentPane.add(comboBox);
 
 	}
 
@@ -520,27 +511,62 @@ public class Gui extends JFrame {
 
 		ButtonPatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
-				java.util.List<SoundpackPreview> list = soundpackView.getAllSelectedSoundpacks();
-				System.out.println(list.size());
-				for(SoundpackPreview disp : list)
-				{
-					try {
-						manager.installArchive(disp.getFile().getArchive());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			}
+
+                try {
+                    manager.installArchive((Soundpack) model.getSelectedItem());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (AlreadyModdedException e1) {
+                    e1.printStackTrace();
+                }
+                checkPatchState();
+
+            }
 		});
 
         btnUnpatch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                checkPatchState();
+                try {
+                    manager.deinstallArchive((Soundpack) model.getSelectedItem());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (AlreadyModdedException e1) {
+                    e1.printStackTrace();
+                } catch (RADSSoundPatcher.exception.notModdedExcption notModdedExcption) {
+                    notModdedExcption.printStackTrace();
+                }
+                checkPatchState();
             }
-        };
+        });
+        
+        regionCombobox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				manager.switchRegion(regionCombobox.getSelectedItem().toString());
+				checkPatchState();
+			}
+		});
+        comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {			
+				checkPatchState();				
+			}
+		});
+	}
+
+	public void checkPatchState() {
+		try {
+			if (!manager.isSoundpackInstalled((Soundpack) model.getSelectedItem())) {
+				ButtonPatch.setEnabled(true);
+				btnUnpatch.setEnabled(false);
+			} else {
+				ButtonPatch.setEnabled(false);
+				btnUnpatch.setEnabled(true);
+			}
+		} catch (FileNotFoundException e1) {
+			ButtonPatch.setEnabled(false);
+			btnUnpatch.setEnabled(false);
+		}
 	}
 
 	public void updatewindow() {
@@ -938,9 +964,9 @@ public class Gui extends JFrame {
 
 			private void append(Object s, boolean appender) {
 				if (appender) {
-					con.area.append(s.toString() + "\n");
+					// con.area.append(s.toString() + "\n");
 				} else {
-					con.area.append(s.toString());
+					// con.area.append(s.toString());
 				}
 			}
 
@@ -953,10 +979,9 @@ public class Gui extends JFrame {
 		mnTutorials.getPopupMenu().setBorder(null);
 		mnAbout.getPopupMenu().setBorder(null);
 	}
-	
-	private void loadOtherRegion()
-	{
-		//TODO ArchiveManager neu Starten und wpk's neu scannen;
-		//this.manager = new ArchiveManager("",regionCombobox.getT);
+
+	private void loadOtherRegion() {
+		// TODO ArchiveManager neu Starten und wpk's neu scannen;
+		// this.manager = new ArchiveManager("",regionCombobox.getT);
 	}
 }

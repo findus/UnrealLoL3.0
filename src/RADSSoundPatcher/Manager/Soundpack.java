@@ -33,5 +33,12 @@ public class Soundpack {
         this.archive = archive;
     }
 
+	@Override
+	public String toString() {
+		return name;
+	}
+    
+    
+
 
 }
