@@ -24,32 +24,15 @@ public class Info extends JDialog {
 
     private JPanel contentPane;
     private JPanel panel;
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-
-        EventQueue.invokeLater(new Runnable() {
-            @SuppressWarnings("deprecation")
-            public void run() {
-                try {
-                    Info dialog = new Info();
-                    dialog.show();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    private Gui gui;
 
 
-    }
 
     /**
      * Create the frame.
      */
-    public Info() {
+    public Info(final Gui gui) {
+        this.gui = gui;
         setModal(true);
         setAutoRequestFocus(false);
         setResizable(false);
@@ -58,8 +41,8 @@ public class Info extends JDialog {
         setIconImage(Toolkit.getDefaultToolkit().getImage("RADSSoundPatcher/Pictures/Monsoon.jpg"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        //Point l = Gui.dialog.getLocation();
-        //setBounds(l.x, l.y, 485, 315);
+        Point l = gui.getLocation();
+        setBounds(l.x, l.y, 485, 315);
         contentPane = new JPanel();
         contentPane.setBackground(Gui.myColor);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,7 +55,7 @@ public class Info extends JDialog {
         btnNewButton.setForeground(Color.LIGHT_GRAY);
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                new Update().setVisible(true);
+                new Update(gui).setVisible(true);
             }
         });
 
@@ -83,6 +66,7 @@ public class Info extends JDialog {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 9));
         btnNewButton.setBounds(0, 265, 116, 23);
+        btnNewButton.setEnabled(false);
         contentPane.add(btnNewButton);
 
         JLabel dtrpnV = new JLabel();

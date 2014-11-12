@@ -45,34 +45,21 @@ public class Update extends JDialog {
     private Thread downloader = null;
     boolean stopdownloading = false;
     private Updater updater = new Updater();
+    private Gui gui;
 
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        try {
-            Update dialog = new Update();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-            dialog.setVisible(true);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Create the dialog.
      */
-    public Update() {
-
+    public Update(Gui gui) {
+        this.gui = gui;
         setModal(true);
         setTitle("Updater");
 
         setResizable(false);
-        //Point l = Gui.dialog.getLocation();
-        //setBounds(l.x, l.y, 441, 207);
+        Point l = gui.getLocation();
+        setBounds(l.x, l.y, 441, 207);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setForeground(Color.LIGHT_GRAY);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

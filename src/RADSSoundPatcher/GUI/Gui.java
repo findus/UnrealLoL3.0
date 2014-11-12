@@ -77,6 +77,7 @@ public class Gui extends JFrame {
 
 	private ArchiveManager manager;
 	private JComboBox comboBox;
+    private Gui gui;
 
 	/**
 	 * Create the frame.
@@ -105,7 +106,7 @@ public class Gui extends JFrame {
 		this.initializeComponents();
 		this.initializeGUI();
 		this.addListener();
-
+        this.gui = this;
 
 
 
@@ -243,6 +244,10 @@ public class Gui extends JFrame {
 		regionCombobox.addItem("Russia");
 		regionCombobox.addItem("Turkey");
 		regionCombobox.addItem("Italian");
+        regionCombobox.addItem("English_US");
+        regionCombobox.addItem("Portugues");
+        regionCombobox.addItem("LATNLATS");
+        regionCombobox.addItem("Oceania");
 
 		headerLabel.setBounds(0, 18, 565, 90);
 		contentPane.add(headerLabel);
@@ -422,12 +427,13 @@ public class Gui extends JFrame {
 				super.windowOpened(e);
 				RandomHeader();
 				UpdateLookandFeel();
+                checkPatchState();
 			}
 		});
 
 		infoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new Info().setVisible(true);
+				new Info(gui).setVisible(true);
 			}
 		});
 
@@ -451,15 +457,15 @@ public class Gui extends JFrame {
 			}
 		});
 
-		mntmCheckForUpdates.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new Update().setVisible(true);
-			}
-		});
+//		mntmCheckForUpdates.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				new Update(gui).setVisible(true);
+//			}
+//		});
 
 		mntmInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new Info().setVisible(true);
+				new Info(gui).setVisible(true);
 			}
 		});
 
@@ -580,14 +586,15 @@ public class Gui extends JFrame {
 
 	public void checkPatchState() {
 		try {
-			if (!manager.isSoundpackInstalled((Soundpack) model.getSelectedItem())) {
+            Soundpack pack = (Soundpack) model.getSelectedItem();
+			if (!manager.isSoundpackInstalled(pack)) {
 				ButtonPatch.setEnabled(true);
 				btnUnpatch.setEnabled(false);
 			} else {
 				ButtonPatch.setEnabled(false);
 				btnUnpatch.setEnabled(true);
 			}
-		} catch (FileNotFoundException e1) {
+		} catch (FileNotFoundException | NullPointerException e1) {
 			ButtonPatch.setEnabled(false);
 			btnUnpatch.setEnabled(false);
 		}
@@ -598,7 +605,7 @@ public class Gui extends JFrame {
 				"Search for Updates ? (Recommended)", "Update?",
 				JOptionPane.YES_NO_OPTION);
 		if (response == 0) {
-			new Update().setVisible(true);
+			new Update(gui).setVisible(true);
 		}
 	}
 

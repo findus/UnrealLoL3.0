@@ -100,30 +100,35 @@ public class ArchiveManager {
 	public void reloadSoundpackList() {
 
 		this.soundpacks.clear();
-		for (File soundpackFolder : SOUNDPACKFOLDER.listFiles()) {
-			if (soundpackFolder.isDirectory()) {
+        if(SOUNDPACKFOLDER.exists()) {
+            for (File soundpackFolder : SOUNDPACKFOLDER.listFiles()) {
+                if (soundpackFolder.isDirectory()) {
 
-				for (File g : soundpackFolder.listFiles()) {
-					if (g.getName().endsWith("audio.wpk")) {
+                    for (File g : soundpackFolder.listFiles()) {
+                        if (g.getName().endsWith("audio.wpk")) {
 
-						Soundpack soundPack;
-						try {
-							soundPack = new Soundpack(
-									soundpackFolder.getName(), new ArchiveFile(
-											g));
-							this.soundpacks.add(soundPack);
-							logger.info("Soundpack \"" + soundpackFolder
-									+ "\" loaded");
-						} catch (ArchiveException e) {
-							logger.error(e.getMessage());
-						}
+                            Soundpack soundPack;
+                            try {
+                                soundPack = new Soundpack(
+                                        soundpackFolder.getName(), new ArchiveFile(
+                                        g)
+                                );
+                                this.soundpacks.add(soundPack);
+                                logger.info("Soundpack \"" + soundpackFolder
+                                        + "\" loaded");
+                            } catch (ArchiveException e) {
+                                logger.error(e.getMessage());
+                            }
 
-					}
-				}
+                        }
+                    }
 
-			}
+                }
 
-		}
+            }
+        } else {
+            logger.error("Soundpack folder is missing");
+        }
 
 		logger.info("Loaded " + soundpacks.size() + " Soundpacks.");
 	}
