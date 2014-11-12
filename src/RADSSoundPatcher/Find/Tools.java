@@ -78,41 +78,47 @@ public class Tools {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String GetLoLFolder() throws IOException {
-		String Path = null;
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setDialogTitle("Please set your Location of \"lol.launcher.exe\"");
-		chooser.setBackground(Gui.myColor);
-		chooser.setForeground(Color.LIGHT_GRAY);
-		chooser.setFileFilter(new FileFilter() {
-			public boolean accept(File f) {
-				return f.getName().toLowerCase().endsWith(".exe")
-						|| f.isDirectory();
-			}
+	public static String GetLoLFolder() {
+        String Path = null;
+        try {
 
-			public String getDescription() {
-				return "lol.launcher.exe(*.exe)";
-			}
-		});
-		int rueckgabeWert = chooser.showOpenDialog(null);
-		if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
-			String AbsolutePath = chooser.getSelectedFile().getAbsolutePath();
-			if (AbsolutePath.contains("lol.launcher.exe")) {
-				System.out.println("- Found League of Legends Installation");
-				Path = chooser.getSelectedFile().getParent();
-				File FilePath = new File("Path");
-				FileWriter writer;
-				writer = new FileWriter(FilePath);
-				writer.write(Path);
-				writer.flush();
-				writer.close();
-			} else {
-				System.out
-						.println("- No League of Legends Installation found :(");
-				Path = "No installation found";
-			}
-		}
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setDialogTitle("Please set your Location of \"lol.launcher.exe\"");
+            chooser.setBackground(Gui.myColor);
+            chooser.setForeground(Color.LIGHT_GRAY);
+            chooser.setFileFilter(new FileFilter() {
+                public boolean accept(File f) {
+                    return f.getName().toLowerCase().endsWith(".exe")
+                            || f.isDirectory();
+                }
+
+                public String getDescription() {
+                    return "lol.launcher.exe(*.exe)";
+                }
+            });
+            int rueckgabeWert = chooser.showOpenDialog(null);
+            if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
+                String AbsolutePath = chooser.getSelectedFile().getAbsolutePath();
+                if (AbsolutePath.contains("lol.launcher.exe")) {
+                    System.out.println("- Found League of Legends Installation");
+                    Path = chooser.getSelectedFile().getParent();
+                    File FilePath = new File("Path");
+                    FileWriter writer;
+                    writer = new FileWriter(FilePath);
+                    writer.write(Path);
+                    writer.flush();
+                    writer.close();
+                } else {
+                    System.out
+                            .println("- No League of Legends Installation found :(");
+                    Path = "No installation found";
+                }
+            }
+        } catch (IOException e)
+        {
+            logger.error("Write Error");
+        }
 		return Path;
 	}
 

@@ -12,9 +12,7 @@ import org.xml.sax.SAXException;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +23,9 @@ import java.util.List;
  */
 public class ArchiveManager {
 
-	private File lolPath;
+
+
+    private File lolPath;
 	private static final File SOUNDPACKFOLDER = new File("Soundpacks/");
 	private List<ArchiveFile> archiveFiles;
 	private List<Soundpack> soundpacks;
@@ -34,31 +34,44 @@ public class ArchiveManager {
 
 	Logger logger = Logger.getRootLogger();
 
-	public ArchiveManager(File lolpath, String region) {
-		this.lolPath = lolpath;
+	public ArchiveManager(String region) {
+		searchLoL();
 		this.PATH = "\\RADS\\projects\\"
 				+ Tools.GetRegionInformation("English") + "\\managedfiles\\";
 		this.archiveFiles = new ArrayList();
 		this.soundpacks = new ArrayList<Soundpack>();
-        File file = new File(this.lolPath.getAbsolutePath() + this.PATH);
-		if(!file.exists())
-		{
-			JOptionPane.showMessageDialog(null, "LoL Path not found.");
-		}else
-		{
-			this.reloadArchiveList();
-			
-		}
-		this.reloadSoundpackList();
-		
-		
 
+        if(lolPath != null)
+        {
+            File file = new File(this.lolPath.getAbsolutePath() + this.PATH);
+            if(file.exists())
+            {
+                this.reloadArchiveList();
+            }
+            else
+            {
+                logger.info("No LoL installation found");
+            }
+
+        }
+        else
+        {
+            logger.info("No LoL installation found");
+        }
+        this.reloadSoundpackList();
 	}
+
+    public File getLolPath() {
+        return lolPath;
+    }
 
 	public void reloadArchiveList() {
 		this.archiveFiles.clear();
-        if(new File(this.lolPath.getAbsolutePath() + this.PATH).exists())
-            reloadArchiveList(new File(this.lolPath.getAbsolutePath() + this.PATH));
+        File file =  new File(this.lolPath.getAbsolutePath() + this.PATH);
+        if(file.exists())
+            reloadArchiveList(file);
+        else
+            logger.error("League of Legends path not found. (" + file.getAbsolutePath()  + ")");
         logger.info("Loaded " + archiveFiles.size() + " Archives.");
 
 
@@ -167,10 +180,39 @@ public class ArchiveManager {
 		
 	}
 	
+
 	public void switchRegion(String region) {
 		logger.info("Trying to switch region to " + region);
 		this.PATH = "\\RADS\\projects\\" + Tools.GetRegionInformation(region)
 				+ "\\managedfiles\\";
 		reloadArchiveList();
 	}
+
+    public void setLolPath(String path)
+    {
+     this.lolPath =new File(path);
+        this.reloadArchiveList();
+    }
+
+    public void searchLoL() {
+        try {
+            BufferedReader LAWL = null;
+            String Folder = null;
+            File Paath = new File("Path");
+            if (Paath.exists()) {
+                LAWL = new BufferedReader(new FileReader("Path"));
+                Folder = LAWL.readLine();
+                File file = new File(Folder);
+                if (file.exists()) {
+                    this.lolPath = new File(Folder);
+                } else {
+                    logger.info("- Predefined Path containts no LoL installation");
+                }
+            }
+        } catch (IOException e) {
+            logger.error("Excpetion while reading file: " + e.getClass()+ " " + e.getMessage());
+        }
+
+
+    }
 }

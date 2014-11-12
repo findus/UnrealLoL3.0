@@ -15,8 +15,8 @@ public class SoundPackInstallerGUI {
 
     public static void main(String[] args) throws Throwable {
         //Misc.SelfTest();
-        
-       ArchiveManager manager = new ArchiveManager(new File("C:/Riot Games/League of Legends/"),"English");
+       Gui.RedirectOutputStream();
+       ArchiveManager manager = new ArchiveManager("English");
        Gui gui = new Gui(manager);
     }
 }
