@@ -1,16 +1,4 @@
-2014-11-12 18:41:18,816 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: No LoL installation found
-2014-11-12 18:41:18,829 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Soundpack "Soundpacks\Unreal Tournament" loaded
-2014-11-12 18:41:18,829 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 1 Soundpacks.
-2014-11-12 18:41:29,693 ERROR [RADSSoundPatcher.Manager.ArchiveManager] root: League of Legends path not found. (D:\Dokumente\GitHub\UnrealLoL3.0\No installation found\RADS\projects\lol_game_client_en_gb\managedfiles)
-2014-11-12 18:41:29,693 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 0 Archives.
-2014-11-12 18:41:48,047 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 138 Archives.
-2014-11-12 18:41:48,050 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: [Unreal Tournament] Matching Archive found
-2014-11-12 18:41:54,182 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Trying to switch region to German
-2014-11-12 18:41:54,284 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 140 Archives.
-2014-11-12 18:41:54,284 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: [Unreal Tournament] Matching Archive found
-2014-11-12 18:42:08,974 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Trying to switch region to Romanian
-2014-11-12 18:42:08,977 ERROR [RADSSoundPatcher.Manager.ArchiveManager] root: League of Legends path not found. (C:\Riot Games\League of Legends\RADS\projects\lol_game_client_ro_ro\managedfiles)
-2014-11-12 18:42:08,977 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 0 Archives.
-2014-11-12 18:42:15,837 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Trying to switch region to Italian
-2014-11-12 18:42:15,840 ERROR [RADSSoundPatcher.Manager.ArchiveManager] root: League of Legends path not found. (C:\Riot Games\League of Legends\RADS\projects\lol_game_client_it_it\managedfiles)
-2014-11-12 18:42:15,840 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 0 Archives.
+2014-11-12 18:44:46,628 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 138 Archives.
+2014-11-12 18:44:46,632 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Soundpack "Soundpacks\Unreal Tournament" loaded
+2014-11-12 18:44:46,632 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 1 Soundpacks.
+2014-11-12 18:44:47,046 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: [Unreal Tournament] Matching Archive found
