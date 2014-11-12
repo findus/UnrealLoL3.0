@@ -89,6 +89,7 @@ public class Gui extends JFrame {
 			UnsupportedLookAndFeelException, InstantiationException,
 			IllegalAccessException {
 
+
 		BUTTON_NORMAL = ImageIO
 				.read(Gui.class
 						.getResourceAsStream("/RADSSoundPatcher/Pictures/Theme/ButtonNormal.png"));
@@ -100,13 +101,13 @@ public class Gui extends JFrame {
 						.getResourceAsStream("/RADSSoundPatcher/Pictures/Theme/ButtonPressed.png"));
 
 		LookAndFeel(myColor);
-
+        this.manager = manager;
 		this.initializeComponents();
 		this.initializeGUI();
 		this.addListener();
 
-		this.manager = manager;
-		//RedirectOutputStream();
+
+
 
 		loadSoundpacks();
 
@@ -155,6 +156,7 @@ public class Gui extends JFrame {
 		infoButton = new JButton("Info");
 		model = new DefaultComboBoxModel();
 		comboBox = new JComboBox(model);
+        con = new Console(this);
 
 		new PropertyChangeListener() {
 			@Override
@@ -249,7 +251,9 @@ public class Gui extends JFrame {
 		lolPath.setBackground(myColor);
 		// txtEnterYourLeague.setForeground(Color.LIGHT_GRAY);
 		lolPath.setText("Enter your League of Legends Path here...");
-		lolPath.setEditable(false);
+		if(manager.getLolPath() != null)
+         lolPath.setText(manager.getLolPath().getAbsolutePath());
+        lolPath.setEditable(false);
 		lolPath.setBounds(12, 112, 410, 24);
 		contentPane.add(lolPath);
 		lolPath.setColumns(10);
@@ -552,6 +556,26 @@ public class Gui extends JFrame {
 				checkPatchState();				
 			}
 		});
+
+        addComponentListener(
+                new ComponentAdapter() {
+                    @Override
+                    public void componentMoved(ComponentEvent e) {
+                        con.setBounds(e.getComponent().getX(), e.getComponent().getY() + 318, con.getWidth(), con.getHeight());
+                        con.toFront();
+                    }
+                }
+        );
+
+        openButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               String test = RADSSoundPatcher.Find.Tools.GetLoLFolder();
+                manager.setLolPath(test);
+                lolPath.setText(test);
+                checkPatchState();
+            }
+        });
 	}
 
 	public void checkPatchState() {
@@ -938,7 +962,7 @@ public class Gui extends JFrame {
 
 	}
 
-	private static void RedirectOutputStream() {
+	public static void RedirectOutputStream() {
 		System.setOut(new PrintStream(System.out) {
 			boolean newline = false;
 
@@ -963,11 +987,13 @@ public class Gui extends JFrame {
 			}
 
 			private void append(Object s, boolean appender) {
-				if (appender) {
-					// con.area.append(s.toString() + "\n");
-				} else {
-					// con.area.append(s.toString());
-				}
+				if(con != null) {
+                    if (appender) {
+                        con.area.append(s.toString() + "\n");
+                    } else {
+                        con.area.append(s.toString());
+                    }
+                }
 			}
 
 		});
