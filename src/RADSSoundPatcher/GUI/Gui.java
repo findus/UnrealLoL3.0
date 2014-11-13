@@ -518,9 +518,7 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
                 try {
-                    manager.installArchive((Soundpack) model.getSelectedItem());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                    ((Soundpack) model.getSelectedItem()).getArchiveFile().patch();
                 } catch (AlreadyModdedException e1) {
                     e1.printStackTrace();
                 }
@@ -534,11 +532,7 @@ public class Gui extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 checkPatchState();
                 try {
-                    manager.deinstallArchive((Soundpack) model.getSelectedItem());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (AlreadyModdedException e1) {
-                    e1.printStackTrace();
+                    ((Soundpack) model.getSelectedItem()).getArchiveFile().unpatch();
                 } catch (RADSSoundPatcher.exception.notModdedExcption notModdedExcption) {
                     notModdedExcption.printStackTrace();
                 }
@@ -549,7 +543,9 @@ public class Gui extends JFrame {
         regionCombobox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				manager.switchRegion(regionCombobox.getSelectedItem().toString());
-				checkPatchState();
+				model.removeAllElements();
+                loadSoundpacks();
+                checkPatchState();
 			}
 		});
         comboBox.addActionListener(new ActionListener() {
@@ -574,7 +570,11 @@ public class Gui extends JFrame {
                String test = RADSSoundPatcher.Find.Tools.GetLoLFolder();
                 manager.setLolPath(test);
                 lolPath.setText(test);
+                loadOtherRegion();
                 checkPatchState();
+                model.removeAllElements();
+                loadSoundpacks();
+
             }
         });
 	}
@@ -1009,7 +1009,6 @@ public class Gui extends JFrame {
 	}
 
 	private void loadOtherRegion() {
-		// TODO ArchiveManager neu Starten und wpk's neu scannen;
-		// this.manager = new ArchiveManager("",regionCombobox.getT);
+		this.manager.switchRegion(regionCombobox.getSelectedItem().toString());
 	}
 }

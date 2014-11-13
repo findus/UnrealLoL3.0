@@ -1,16 +1,15 @@
 package RADSSoundPatcher.Manager;
 
 import RADSSoundPatcher.Find.Tools;
-import RADSSoundPatcher.exception.AlreadyModdedException;
 import RADSSoundPatcher.exception.ArchiveException;
-
 import RADSSoundPatcher.exception.SoundpackNotValidException;
-import RADSSoundPatcher.exception.notModdedExcption;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,9 +68,10 @@ public class ArchiveManager {
             for (File soundpackFolder : SOUNDPACKFOLDER.listFiles()) {
                 if (soundpackFolder.isDirectory()) {
                     try {
+                        logger.debug("Add Soundpack: " + soundpackFolder.getAbsolutePath() + " .. " + path);
                         soundpacks.add(new Soundpack(soundpackFolder,path));
                     } catch (SoundpackNotValidException e) {
-                        logger.error(e.getMessage());
+                        logger.error("Soundpack " + soundpackFolder.getName() + "is not valid");
                     } catch (ArchiveException e) {
                         e.printStackTrace();
                     }
@@ -85,25 +85,6 @@ public class ArchiveManager {
 		logger.info("Loaded " + soundpacks.size() + " Soundpacks.");
 	}
 
-	// TODO Code Method that detects duplicates
-	public void installArchive(Soundpack soundpack) throws IOException,
-			AlreadyModdedException {
-		Date start = new Date();
-		logger.info("Patching now! Soundpack: " + soundpack.getName());
-		soundpack.getArchiveFile().patch();
-		Date end = new Date();
-		logger.error("Patching done ("
-				+ ((end.getTime() - start.getTime()) + "ms)"));
-	}
-
-    public void deinstallArchive(Soundpack soundpack) throws IOException,
-            AlreadyModdedException, notModdedExcption {
-        Date start = new Date();
-        soundpack.getArchiveFile().unpatch();
-        Date end = new Date();
-        logger.error("Unpatching done ("
-                + ((end.getTime() - start.getTime()) + "ms)"));
-    }
 
 
     public List<Soundpack> getSoundpacks() {
@@ -121,8 +102,11 @@ public class ArchiveManager {
 
     public void setLolPath(String path)
     {
-     this.lolPath =new File(path);
-        //TODO maybe refresh
+        if(path != null)
+        this.lolPath =new File(path);
+        else
+            this.lolPath=new File("");
+
     }
 
     public void searchLoL() {

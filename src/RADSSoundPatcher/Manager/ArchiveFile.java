@@ -36,8 +36,11 @@ public class ArchiveFile {
         for (File temp : pack.getParts()) {
             logger.debug("Searching for: " + temp.getName());
             File tempFile = searchFiles(basePath, temp.getName());
-            if (tempFile != null)
+
+            if (tempFile != null) {
+                logger.debug("Add file to Arraylist: " + tempFile.getAbsolutePath());
                 files.add(tempFile);
+            }
             else
                 throw new SoundpackNotValidException();
         }
