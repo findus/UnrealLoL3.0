@@ -1,162 +1,179 @@
 package RADSSoundPatcher.Manager;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-
 import RADSSoundPatcher.Misc.Misc;
 import RADSSoundPatcher.exception.AlreadyModdedException;
 import RADSSoundPatcher.exception.ArchiveException;
+import RADSSoundPatcher.exception.SoundpackNotValidException;
 import RADSSoundPatcher.exception.notModdedExcption;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by philipp on 10.11.2014.
  */
 public class ArchiveFile {
-	private String name;
-	private String championname;
-	File wpkFile;
-	File eventFile;
-	File bnkFile;
-	Logger logger = Logger.getRootLogger();
+    private String name;
+    private List<File> files = new ArrayList<>();
 
-	public ArchiveFile(File wpkFile) throws ArchiveException {
+    private Soundpack pack;
+    private File basePath;
+    Logger logger = Logger.getRootLogger();
 
-		// Dont know if I have to handle this this way, some users had
-		// troubles to install a mod on another Region if those files
-		// remains the same
+    public ArchiveFile(Soundpack pack, File basePath) throws ArchiveException, SoundpackNotValidException {
 
-		this.wpkFile = wpkFile;
-		File parentFolder = wpkFile.getParentFile();
-		String filename = wpkFile.getName().replace("audio.wpk", "");
-		for (File tempFile : parentFolder.listFiles()) {
+        // Dont know if I have to handle this this way, some users had
+        // troubles to install a mod on another Region if those files
+        // remains the same
 
-			// TODO Check fertig machen
-			if (tempFile.getName().equals(filename + "audio.bnk"))
-				this.bnkFile = tempFile;
+        this.basePath = basePath;
+        this.pack = pack;
 
-			if (tempFile.getName().equals(filename + "events.bnk"))
-				this.eventFile = tempFile;
-		}
-		if (wpkFile != null && bnkFile != null && eventFile != null) {
-			this.name = wpkFile.getName();
-			this.championname = wpkFile.getName().split("_")[0] + " "
-					+ wpkFile.getName().split("_")[1];
+        for (File temp : pack.getParts()) {
+            logger.debug("Searching for: " + temp.getName());
+            File tempFile = searchFiles(basePath, temp.getName());
+            if (tempFile != null)
+                files.add(tempFile);
+            else
+                throw new SoundpackNotValidException();
+        }
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean hasBackup() {
+
+        boolean hasBak = true;
+
+        for (File temp : files) {
+            File tempFile = new File(temp.getAbsolutePath() + "_bak");
+            if (!tempFile.exists())
+                hasBak = false;
+            logger.debug("File " + temp.getAbsolutePath() +" has Backup: " + hasBak);
+        }
+
+        return hasBak;
+    }
+
+    public void createBackup() throws AlreadyModdedException {
+
+        if (!hasBackup()) {
+            try {
+                for (File file : files) {
+                    File bakFile = new File(file.getAbsolutePath() + "_bak");
+                    if (!bakFile.exists()) {
+                        logger.debug("Creating Backup: File: " + file.getAbsolutePath());
+                        Misc.copyFile(file, bakFile);
+                    } else {
+                        logger.error("Backup file still exists: [" + bakFile.getAbsolutePath() + "] this might be the original File, will leave this unchanged!");
+                    }
+                }
+            } catch (IOException e) {
+                logger.error("[" + this.getName() + "] Backup error");
+            }
+
+        } else {
+            logger.error("Archive \"" + this.getName() + "\" is already modded");
+            throw new AlreadyModdedException("Archive \"" + this.getName()
+                    + "\" is already modded");
+        }
+    }
+
+    public void unpatch() throws notModdedExcption {
+        if (hasBackup()) {
+            try {
+                if (hasBackup()) {
+                    for (File file : files) {
+                        File bakFile = new File(file.getAbsolutePath() + "_bak");
+                        Misc.copyFile(bakFile,file);
+                        bakFile.delete();
+                    }
+                }
+                else
+                {
+                    logger.error("Backup not found");
+                }
+            } catch (IOException e) {
+                logger.error("[" + this.getName() + "] Unpatch error");
+            }
+
+        } else {
+            logger.error("Archive \"" + this.getName() + "\" is not modded");
+            throw new notModdedExcption("Archive \"" + this.getName()
+                    + "\" is not modded");
+        }
+    }
+
+    public void patch() throws AlreadyModdedException {
+        Date start = new Date();
+        createBackup();
+        // Patchlogic
+        try {
+            for(File soundPackFile : pack.getParts())
+            {
+                logger.debug("Gonna patch " + soundPackFile.getName());
+                for(File archiveFile : files)
+                {
+                    if(soundPackFile.getName().equals(archiveFile.getName()))
+                    {
+                        logger.debug("Found file in Archive: " + archiveFile.getAbsolutePath());
+                        Misc.copyFile(soundPackFile,archiveFile);
+                        logger.debug("File Patched");
+                    }
+                }
+            }
+            Date end = new Date();
+            logger.info("Patching Done :) ("
+                    + ((end.getTime() - start.getTime()) + "ms)"));
+        } catch (IOException e) {
+            logger.error("[" + this.getName() + "] Patch error");
+        }
+    }
+
+    public File searchFiles(File basePath, String searchFile) {;
+        if (basePath.exists()) {
+            File retval =  searchOtherFiles(basePath, searchFile);
+            if(retval != null) {
+                logger.debug("retval: " + retval.getAbsolutePath());
+                return retval;
+            } else
+            {
+                logger.error("File not found: " + searchFile);
+            }
+        }
+        else {
+            logger.error("League of Legends path not found. (" + basePath.getAbsolutePath() + ")");
+        }
+        return null;
+    }
 
 
-		} else {
-			//logger.error("[" + wpkFile
-			//		+ "] Archive does not contain all needed Files");
-			throw new ArchiveException("Archive does not have all files.");
-		}
+    private File searchOtherFiles(File folder, String searchFile) {
+        File retVal = null;
+        for (File file : folder.listFiles()) {
+            if (file.isDirectory() && file != null) {
+                retVal =  searchOtherFiles(file, searchFile);
+                if(retVal != null)
+                {
+                    return retVal;
+                }
+            } else {
 
-	}
+                if (file.getName().equals(searchFile)) {
 
-	public String getName() {
-		return name;
-	}
+                    retVal = file;
+                    break;
+                }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public File getEventFile() {
-		return eventFile;
-	}
-
-	public void setEventFile(File eventFile) {
-		this.eventFile = eventFile;
-	}
-
-	public File getBnkFile() {
-		return bnkFile;
-	}
-
-	public String getChampionname() {
-		return championname;
-	}
-
-	public void setChampionname(String championname) {
-		this.championname = championname;
-	}
-
-
-	public File getWpkFile() {
-		return wpkFile;
-	}
-
-	public boolean hasBackup() {
-		File wpkBackup = new File(wpkFile.getAbsolutePath() + "_bak");
-		File bnkFileBackup = new File(bnkFile.getAbsolutePath() + "_bak");
-		File eventFileBackup = new File(eventFile.getAbsolutePath() + "_bak");
-
-		if (!wpkBackup.exists() && !bnkFileBackup.exists()
-				&& !eventFileBackup.exists())
-			return false;
-		else
-			return true;
-
-	}
-
-	public void createBackup() throws AlreadyModdedException {
-
-		if (!hasBackup()) {
-			try {
-				Misc.copyFile(wpkFile, new File(wpkFile.getAbsolutePath() + "_bak"));		
-				Misc.copyFile(bnkFile, new File(bnkFile.getAbsolutePath() + "_bak"));			
-				Misc.copyFile(eventFile, new File(eventFile.getAbsolutePath() + "_bak"));
-			} catch (IOException e) {
-				logger.error("["+this.getName()+"] Backup error");
-			}
-
-		} else {
-
-			logger.error("Archive \"" + this.getName() + "\" is already modded");
-			throw new AlreadyModdedException("Archive \"" + this.getName()
-					+ "\" is already modded");
-		}
-	}
-
-	public void unpatch() throws notModdedExcption {
-		if (hasBackup()) {
-			File wpkbak = new File(wpkFile.getAbsolutePath() + "_bak");
-			File bnkbak = new File(bnkFile.getAbsolutePath() + "_bak");
-			File eventbak = new File(eventFile.getAbsolutePath() + "_bak");
-			try {
-				Misc.copyFile(wpkbak, wpkFile);
-				Misc.copyFile(bnkbak, bnkFile);
-				Misc.copyFile(eventbak, eventFile);
-				wpkbak.delete();
-				bnkbak.delete();
-				eventbak.delete();
-			} catch (IOException e) {
-				logger.error("["+this.getName()+"] Unpatch error");
-			}			
-
-		} else {
-			logger.error("Archive \"" + this.getName() + "\" is not modded");
-			throw new notModdedExcption("Archive \"" + this.getName()
-					+ "\" is not modded");
-		}
-	}
-
-	public void patch(ArchiveFile soundpack) throws AlreadyModdedException {
-		Date start = new Date();
-		logger.info("File found in LoLClient: "
-				+ this.getWpkFile().getAbsolutePath());
-		createBackup();
-		// Patchlogic
-		try {
-			Misc.copyFile(soundpack.getWpkFile(), this.getWpkFile());		
-			Misc.copyFile(soundpack.getBnkFile(), this.getBnkFile());		
-			Misc.copyFile(soundpack.getEventFile(), this.getEventFile());
-			Date end = new Date();
-			logger.info("Patching Done :) ("
-					+ ((end.getTime() - start.getTime()) + "ms)"));
-		} catch (IOException e) {
-			logger.error("["+this.getName()+"] Patch error");
-		}
-	}
+            }
+        }
+        return retVal;
+    }
 }

@@ -1,19 +1,14 @@
 package RADSSoundPatcher.Manager;
 
 import RADSSoundPatcher.Find.Tools;
-import RADSSoundPatcher.Misc.Misc;
 import RADSSoundPatcher.exception.AlreadyModdedException;
 import RADSSoundPatcher.exception.ArchiveException;
 
+import RADSSoundPatcher.exception.SoundpackNotValidException;
 import RADSSoundPatcher.exception.notModdedExcption;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import javax.swing.JOptionPane;
-import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,26 +22,26 @@ public class ArchiveManager {
 
     private File lolPath;
 	private static final File SOUNDPACKFOLDER = new File("Soundpacks/");
-	private List<ArchiveFile> archiveFiles;
 	private List<Soundpack> soundpacks;
 
-	private String PATH;
+
+
+    private File path;
 
 	Logger logger = Logger.getRootLogger();
 
 	public ArchiveManager(String region) {
 		searchLoL();
-		this.PATH = "\\RADS\\projects\\"
-				+ Tools.GetRegionInformation("English") + "\\managedfiles\\";
-		this.archiveFiles = new ArrayList();
+
 		this.soundpacks = new ArrayList<Soundpack>();
 
         if(lolPath != null)
         {
-            File file = new File(this.lolPath.getAbsolutePath() + this.PATH);
-            if(file.exists())
+            this.path =new File(this.lolPath.getAbsolutePath()+  "\\RADS\\projects\\"
+                    + Tools.GetRegionInformation("English") + "\\managedfiles\\");
+            if(path.exists())
             {
-                this.reloadArchiveList();
+                //this.searchSoundArchive();
             }
             else
             {
@@ -58,6 +53,8 @@ public class ArchiveManager {
         {
             logger.info("No LoL installation found");
         }
+
+
         this.reloadSoundpackList();
 	}
 
@@ -65,64 +62,19 @@ public class ArchiveManager {
         return lolPath;
     }
 
-	public void reloadArchiveList() {
-		this.archiveFiles.clear();
-        File file =  new File(this.lolPath.getAbsolutePath() + this.PATH);
-        if(file.exists())
-            reloadArchiveList(file);
-        else
-            logger.error("League of Legends path not found. (" + file.getAbsolutePath()  + ")");
-        logger.info("Loaded " + archiveFiles.size() + " Archives.");
-
-
-	}
-
-	private void reloadArchiveList(File folder) {
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory() && file != null) {
-				reloadArchiveList(file);
-			} else {
-
-				if (file.getName().endsWith("audio.wpk")) {
-
-					try {
-						ArchiveFile arcFile = new ArchiveFile(file);
-						this.archiveFiles.add(arcFile);
-					} catch (ArchiveException e) {
-						//logger.error(e.getMessage());
-					}
-				}
-
-			}
-		}
-	}
-
 	public void reloadSoundpackList() {
 
 		this.soundpacks.clear();
         if(SOUNDPACKFOLDER.exists()) {
             for (File soundpackFolder : SOUNDPACKFOLDER.listFiles()) {
                 if (soundpackFolder.isDirectory()) {
-
-                    for (File g : soundpackFolder.listFiles()) {
-                        if (g.getName().endsWith("audio.wpk")) {
-
-                            Soundpack soundPack;
-                            try {
-                                soundPack = new Soundpack(
-                                        soundpackFolder.getName(), new ArchiveFile(
-                                        g)
-                                );
-                                this.soundpacks.add(soundPack);
-                                logger.info("Soundpack \"" + soundpackFolder
-                                        + "\" loaded");
-                            } catch (ArchiveException e) {
-                                logger.error(e.getMessage());
-                            }
-
-                        }
+                    try {
+                        soundpacks.add(new Soundpack(soundpackFolder,path));
+                    } catch (SoundpackNotValidException e) {
+                        logger.error(e.getMessage());
+                    } catch (ArchiveException e) {
+                        e.printStackTrace();
                     }
-
                 }
 
             }
@@ -138,31 +90,18 @@ public class ArchiveManager {
 			AlreadyModdedException {
 		Date start = new Date();
 		logger.info("Patching now! Soundpack: " + soundpack.getName());
-		String archiveName = soundpack.getArchive().getName();
-		for (ArchiveFile file : archiveFiles) {
-			if (archiveName.equals(file.getName())) {
-				file.patch(soundpack.getArchive());
-				return;
-			}
-		}
+		soundpack.getArchiveFile().patch();
 		Date end = new Date();
-		logger.error("File is not present in your LoLClient, patching aborted ("
+		logger.error("Patching done ("
 				+ ((end.getTime() - start.getTime()) + "ms)"));
 	}
 
     public void deinstallArchive(Soundpack soundpack) throws IOException,
             AlreadyModdedException, notModdedExcption {
         Date start = new Date();
-        logger.info("UnPatching now! Soundpack: " + soundpack.getName());
-        String archiveName = soundpack.getArchive().getName();
-        for (ArchiveFile file : archiveFiles) {
-            if (archiveName.equals(file.getName())) {
-                file.unpatch();
-                return;
-            }
-        }
+        soundpack.getArchiveFile().unpatch();
         Date end = new Date();
-        logger.error("File is not present in your LoLClient, patching aborted ("
+        logger.error("Unpatching done ("
                 + ((end.getTime() - start.getTime()) + "ms)"));
     }
 
@@ -171,32 +110,19 @@ public class ArchiveManager {
 		return soundpacks;
 	}
 
-	public boolean isSoundpackInstalled(Soundpack p) throws FileNotFoundException
-	{
-		for(ArchiveFile file : this.archiveFiles)
-		{
-			if(file.getWpkFile().getName().equals(p.getArchive().getWpkFile().getName()))
-			{
-				logger.info("[" + p.getName() +"] Matching Archive found");
-				return file.hasBackup();
-			}
-		}
-		throw new FileNotFoundException("Matching archive not found") ;
-		
-	}
-	
 
 	public void switchRegion(String region) {
-		logger.info("Trying to switch region to " + region);
-		this.PATH = "\\RADS\\projects\\" + Tools.GetRegionInformation(region)
-				+ "\\managedfiles\\";
-		reloadArchiveList();
+        logger.info("Trying to switch region to " + region);
+        soundpacks.clear();
+        this.path = new File(this.lolPath.getAbsolutePath()+  "\\RADS\\projects\\"
+                + Tools.GetRegionInformation(region) + "\\managedfiles\\");
+		reloadSoundpackList();
 	}
 
     public void setLolPath(String path)
     {
      this.lolPath =new File(path);
-        this.reloadArchiveList();
+        //TODO maybe refresh
     }
 
     public void searchLoL() {

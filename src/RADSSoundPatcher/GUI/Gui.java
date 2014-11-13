@@ -4,8 +4,6 @@ import RADSSoundPatcher.Manager.ArchiveManager;
 import RADSSoundPatcher.Manager.Soundpack;
 import RADSSoundPatcher.Misc.Misc;
 import RADSSoundPatcher.exception.AlreadyModdedException;
-
-import RADSSoundPatcher.exception.notModdedExcption;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -13,17 +11,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.xml.parsers.ParserConfigurationException;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
@@ -587,14 +582,14 @@ public class Gui extends JFrame {
 	public void checkPatchState() {
 		try {
             Soundpack pack = (Soundpack) model.getSelectedItem();
-			if (!manager.isSoundpackInstalled(pack)) {
+			if (!pack.getArchiveFile().hasBackup()) {
 				ButtonPatch.setEnabled(true);
 				btnUnpatch.setEnabled(false);
 			} else {
 				ButtonPatch.setEnabled(false);
 				btnUnpatch.setEnabled(true);
 			}
-		} catch (FileNotFoundException | NullPointerException e1) {
+		} catch (NullPointerException e1) {
 			ButtonPatch.setEnabled(false);
 			btnUnpatch.setEnabled(false);
 		}
