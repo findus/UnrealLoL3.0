@@ -29,48 +29,6 @@ import java.util.Arrays;
 public class Tools {
 
 	static Logger logger = Logger.getRootLogger();
-	static final String FSBEXT = OperatingSystem.getInstance().getFsbext();
-	static final String FFMPEG = OperatingSystem.getInstance().getFFmpeg();
-
-	/**
-	 * Searches the newest availabale Folder of the Soundarchive and returns the
-	 * Foldername as String (Example: 0.0.0.199)
-	 *
-	 * @param LeagueOfLegendsPfad
-	 * @param Region
-	 * @param VOBankName
-	 * @return
-	 */
-	public static String GetNewestFolder(String LeagueOfLegendsPfad,
-			String Region, String VOBankName) {
-		String Patchversion = null;
-		int chars = 0;
-		File Check = new File(LeagueOfLegendsPfad + "/RADS/projects/" + Region
-				+ "/managedfiles/");
-		// System.out.println(Check.getAbsolutePath());
-		if (Check.exists() == true) {
-
-			File VOBANK1 = new File(LeagueOfLegendsPfad + "/RADS/projects/"
-					+ Region + "/managedfiles/");
-			File[] fileList = VOBANK1.listFiles();
-			Arrays.sort(fileList);
-			for (File f : fileList) {
-				String test = f.getName().replace(".", "");
-				int charcheck = Integer.parseInt(test);
-				File VOBANK2 = new File(LeagueOfLegendsPfad + "/RADS/projects/"
-						+ Region + "/managedfiles/" + f.getName()
-						+ "/Data/Sounds/FMOD/" + VOBankName);
-				// System.out.println(VOBANK2.getAbsolutePath());
-				if (VOBANK2.exists() == true) {
-					if (charcheck > chars) {
-						chars = charcheck;
-						Patchversion = f.getName();
-					}
-				}
-			}
-		}
-		return Patchversion;
-	}
 
 	/**
 	 * \brief Opens a filechooser and returns the Path of the File as String
@@ -79,8 +37,9 @@ public class Tools {
 	 * @throws IOException
 	 */
 	public static String GetLoLFolder() {
-        String Path = null;
-        try {
+		File file = null;
+        String path = null;
+		try {
 
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -89,7 +48,7 @@ public class Tools {
             chooser.setForeground(Color.LIGHT_GRAY);
             chooser.setFileFilter(new FileFilter() {
                 public boolean accept(File f) {
-                    return f.getName().toLowerCase().endsWith(".exe")
+                    return f.getName().toLowerCase().endsWith("lol.launcher.exe")
                             || f.isDirectory();
                 }
 
@@ -99,67 +58,30 @@ public class Tools {
             });
             int rueckgabeWert = chooser.showOpenDialog(null);
             if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
-                String AbsolutePath = chooser.getSelectedFile().getAbsolutePath();
-                if (AbsolutePath.contains("lol.launcher.exe")) {
+               file = chooser.getSelectedFile();
+                if (file.getName().contains("lol.launcher.exe")) {
                     System.out.println("- Found League of Legends Installation");
-                    Path = chooser.getSelectedFile().getParent();
+                    path = chooser.getSelectedFile().getParent();
                     File FilePath = new File("Path");
                     FileWriter writer;
                     writer = new FileWriter(FilePath);
-                    writer.write(Path);
+                    writer.write(path);
                     writer.flush();
                     writer.close();
                 } else {
                     System.out
                             .println("- No League of Legends Installation found :(");
-                    Path = "No installation found";
+                    path = "No installation found";
                 }
             }
         } catch (IOException e)
         {
             logger.error("Write Error");
         }
-		return Path;
+		return path;
 	}
 
-	/**
-	 * \brief Converts Inputfile with the inserted parameters
-	 *
-	 * @param Input
-	 * @param SamplingRate
-	 * @param AudioChannels
-	 * @param Format
-	 * @param Output
-	 * @param extension
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	public static void FFMPEGConvert(String Input, Object SamplingRate,
-			Object AudioChannels, String Format, String Output, String extension)
-			throws IOException, InterruptedException {
-		String text11;
-		BufferedReader in;
-		PrintWriter out = new PrintWriter("ffmpeg.log");
-		Process k;
-
-		logger.info("FFMEG: Name: " + Input + " SamplingRate: " + SamplingRate
-				+ " AudioChannels: " + AudioChannels + " Format: " + Format
-				+ " Extension: " + extension);
-		k = Runtime.getRuntime().exec(
-				"fsbext/" + FFMPEG + " -i \"" + Input + "\"" + " -ar "
-						+ SamplingRate + " -ac " + AudioChannels
-						+ " -ab 160 -acodec " + Format + "  -y -f " + extension
-						+ " \"" + Output + "\"");
-		in = new BufferedReader(new InputStreamReader(k.getInputStream()));
-		while ((text11 = in.readLine()) != null) {
-
-			out.println(text11);
-			out.flush();
-		}
-		k.waitFor();
-
-	}
-
+	
 	/**
 	 * Checks if the Folder is Writeable
 	 *

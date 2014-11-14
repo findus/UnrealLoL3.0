@@ -4,6 +4,10 @@ import RADSSoundPatcher.Manager.ArchiveManager;
 import RADSSoundPatcher.Manager.Soundpack;
 import RADSSoundPatcher.Misc.Misc;
 import RADSSoundPatcher.exception.AlreadyModdedException;
+import RADSSoundPatcher.exception.ArchiveException;
+import RADSSoundPatcher.exception.SoundpackNotValidException;
+import RADSSoundPatcher.exception.notModdedExcption;
+
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -14,11 +18,14 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.xml.parsers.ParserConfigurationException;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
@@ -72,7 +79,9 @@ public class Gui extends JFrame {
 
 	private ArchiveManager manager;
 	private JComboBox comboBox;
-    private Gui gui;
+	private Gui gui;
+
+	private Soundpack selectedSoundpack = null;
 
 	/**
 	 * Create the frame.
@@ -85,7 +94,6 @@ public class Gui extends JFrame {
 			UnsupportedLookAndFeelException, InstantiationException,
 			IllegalAccessException {
 
-
 		BUTTON_NORMAL = ImageIO
 				.read(Gui.class
 						.getResourceAsStream("/RADSSoundPatcher/Pictures/Theme/ButtonNormal.png"));
@@ -97,25 +105,31 @@ public class Gui extends JFrame {
 						.getResourceAsStream("/RADSSoundPatcher/Pictures/Theme/ButtonPressed.png"));
 
 		LookAndFeel(myColor);
-        this.manager = manager;
+		this.manager = manager;
 		this.initializeComponents();
 		this.initializeGUI();
-		this.addListener();
-        this.gui = this;
-
-
-
 		loadSoundpacks();
+		this.addListener();
+		this.gui = this;
+
+		
 
 		this.setVisible(true);
 	}
 
 	private void loadSoundpacks() {
-		java.util.List<Soundpack> files = this.manager.getSoundpacks();
-		for (Soundpack file : files) {
-			model.addElement(file);
-
+		java.util.List<File> files = this.manager.getSoundpacks();
+		File ut = null;
+		for (File file : files) {
+			model.addElement(file.getName());
+					
 		}
+		
+		File Soundpacks = new File("Soundpacks/Unreal Tournament/");
+		if (Soundpacks.exists()) {
+		comboBox.setSelectedItem("Unreal Tournament");
+		}
+		
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -152,7 +166,7 @@ public class Gui extends JFrame {
 		infoButton = new JButton("Info");
 		model = new DefaultComboBoxModel();
 		comboBox = new JComboBox(model);
-        con = new Console(this);
+		con = new Console(this);
 
 		new PropertyChangeListener() {
 			@Override
@@ -177,20 +191,20 @@ public class Gui extends JFrame {
 				getClass().getClassLoader().getResource(
 						"RADSSoundPatcher/Pictures/Monsoon.jpg")));
 
-		System.out
-				.println("--------------------------------------------------------------");
-		System.out
-				.println("|  RADSSoundPatcher  for League of Legends                   |");
-		System.out.println("|  V " + Version
-				+ "                                                 |");
-		System.out
-				.println("|  Created with IntelliJ Idea                                |");
-		System.out
-				.println("|  16.12.2013                                    by Fozruk   |");
-		System.out
-				.println("--------------------------------------------------------------");
-		System.out.println("- Loading GUI....");
-		RandomHeader();
+		// System.out
+		// .println("--------------------------------------------------------------");
+		// System.out
+		// .println("|  RADSSoundPatcher  for League of Legends                   |");
+		// System.out.println("|  V " + Version
+		// + "                                                 |");
+		// System.out
+		// .println("|  Created with IntelliJ Idea                                |");
+		// System.out
+		// .println("|  14.11.2014                                    by Fozruk   |");
+		// System.out
+		// .println("--------------------------------------------------------------");
+		// System.out.println("- Loading GUI....");
+		// RandomHeader();
 		Options.Soundpacks();
 
 		regionCombobox.setFont(new Font("Dialog", Font.PLAIN, 11));
@@ -212,7 +226,7 @@ public class Gui extends JFrame {
 		setTitle("Unreal Tournament Announcer Mod for League of Legends V "
 				+ Version);
 		setResizable(false);
-		setBounds(100, 100, 569, 306);
+		setBounds(100, 100, 569, 281);
 
 		contentPane.setBackground(myColor);
 		// contentPane.setForeground(Color.LIGHT_GRAY);
@@ -226,7 +240,7 @@ public class Gui extends JFrame {
 		coverLabel.setBounds(0, 92, 568, 16);
 		contentPane.add(coverLabel);
 		regionCombobox.setToolTipText("");
-		regionCombobox.setBounds(7, 194, 155, 25);
+		regionCombobox.setBounds(9, 190, 155, 25);
 		regionCombobox.setForeground(myColor);
 		contentPane.add(regionCombobox);
 		regionCombobox.addItem("English");
@@ -239,10 +253,10 @@ public class Gui extends JFrame {
 		regionCombobox.addItem("Russia");
 		regionCombobox.addItem("Turkey");
 		regionCombobox.addItem("Italian");
-        regionCombobox.addItem("English_US");
-        regionCombobox.addItem("Portugues");
-        regionCombobox.addItem("LATNLATS");
-        regionCombobox.addItem("Oceania");
+		regionCombobox.addItem("English_US");
+		regionCombobox.addItem("Portugues");
+		regionCombobox.addItem("LATNLATS");
+		regionCombobox.addItem("Oceania");
 
 		headerLabel.setBounds(0, 18, 565, 90);
 		contentPane.add(headerLabel);
@@ -251,9 +265,9 @@ public class Gui extends JFrame {
 		lolPath.setBackground(myColor);
 		// txtEnterYourLeague.setForeground(Color.LIGHT_GRAY);
 		lolPath.setText("Enter your League of Legends Path here...");
-		if(manager.getLolPath() != null)
-         lolPath.setText(manager.getLolPath().getAbsolutePath());
-        lolPath.setEditable(false);
+		if (manager.getLeagueOfLegendsBasePath() != null)
+			lolPath.setText(manager.getLeagueOfLegendsBasePath());
+		lolPath.setEditable(false);
 		lolPath.setBounds(12, 112, 410, 24);
 		contentPane.add(lolPath);
 		lolPath.setColumns(10);
@@ -271,14 +285,14 @@ public class Gui extends JFrame {
 		ButtonPatch.setFont(new Font("Dialog", Font.PLAIN, 11));
 		// ButtonPatch.setForeground(Color.LIGHT_GRAY);
 		ButtonPatch.setBackground(myColor);
-		ButtonPatch.setBounds(432, 194, 119, 25);
+		ButtonPatch.setBounds(432, 188, 119, 25);
 		contentPane.add(ButtonPatch);
 
 		btnUnpatch.setFont(new Font("Dialog", Font.PLAIN, 11));
 		// btnUnpatch.setForeground(Color.LIGHT_GRAY);
 		btnUnpatch.setBackground(myColor);
 		btnUnpatch.setEnabled(false);
-		btnUnpatch.setBounds(432, 220, 119, 25);
+		btnUnpatch.setBounds(432, 215, 119, 25);
 		contentPane.add(btnUnpatch);
 
 		menuBar.setBackground(myColor);
@@ -401,16 +415,17 @@ public class Gui extends JFrame {
 		contentPane.add(lblPatchUnpatch);
 
 		consoleButton = new JButton("Console");
+		consoleButton.setEnabled(false);
 		consoleButton.setFont(new Font("Dialog", Font.PLAIN, 8));
 
-		consoleButton.setBounds(-4, 259, 56, 23);
+		consoleButton.setBounds(0, 235, 56, 23);
 		contentPane.add(consoleButton);
 
 		infoButton.setFont(new Font("Dialog", Font.PLAIN, 9));
-		infoButton.setBounds(50, 259, 56, 23);
+		infoButton.setBounds(54, 235, 56, 23);
 		contentPane.add(infoButton);
 
-		comboBox.setBounds(181, 194, 228, 25);
+		comboBox.setBounds(181, 190, 228, 25);
 		contentPane.add(comboBox);
 
 	}
@@ -422,7 +437,7 @@ public class Gui extends JFrame {
 				super.windowOpened(e);
 				RandomHeader();
 				UpdateLookandFeel();
-                checkPatchState();
+				checkPatchState();
 			}
 		});
 
@@ -452,11 +467,11 @@ public class Gui extends JFrame {
 			}
 		});
 
-//		mntmCheckForUpdates.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				new Update(gui).setVisible(true);
-//			}
-//		});
+		// mntmCheckForUpdates.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// new Update(gui).setVisible(true);
+		// }
+		// });
 
 		mntmInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -517,81 +532,95 @@ public class Gui extends JFrame {
 		ButtonPatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-                try {
-                    ((Soundpack) model.getSelectedItem()).getArchiveFile().patch();
-                } catch (AlreadyModdedException e1) {
-                    e1.printStackTrace();
-                }
-                checkPatchState();
+				try {
+					selectedSoundpack.getArchiveFile().patch();
+				} catch (AlreadyModdedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				checkPatchState();
 
-            }
-		});
-
-        btnUnpatch.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                checkPatchState();
-                try {
-                    ((Soundpack) model.getSelectedItem()).getArchiveFile().unpatch();
-                } catch (RADSSoundPatcher.exception.notModdedExcption notModdedExcption) {
-                    notModdedExcption.printStackTrace();
-                }
-                checkPatchState();
-            }
-        });
-        
-        regionCombobox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				manager.switchRegion(regionCombobox.getSelectedItem().toString());
-				model.removeAllElements();
-                loadSoundpacks();
-                checkPatchState();
-			}
-		});
-        comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {			
-				checkPatchState();				
 			}
 		});
 
-        addComponentListener(
-                new ComponentAdapter() {
-                    @Override
-                    public void componentMoved(ComponentEvent e) {
-                        con.setBounds(e.getComponent().getX(), e.getComponent().getY() + 318, con.getWidth(), con.getHeight());
-                        con.toFront();
-                    }
-                }
-        );
+		btnUnpatch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					selectedSoundpack.getArchiveFile().unpatch();
+				} catch (notModdedExcption e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				checkPatchState();
+			}
+		});
 
-        openButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               String test = RADSSoundPatcher.Find.Tools.GetLoLFolder();
-                manager.setLolPath(test);
-                lolPath.setText(test);
-                loadOtherRegion();
-                checkPatchState();
-                model.removeAllElements();
-                loadSoundpacks();
+		regionCombobox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manager.switchRegion(regionCombobox.getSelectedItem()
+						.toString());
+				checkPatchState();
+			}
+		});
+		
+		comboBox.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				checkPatchState();
+			}
+		});
+		
+		
 
-            }
-        });
+
+
+		openButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String test = RADSSoundPatcher.Find.Tools.GetLoLFolder();
+				try {
+					manager.setLeagueOfLegendsBasePath(test);
+					lolPath.setText(test);
+					loadOtherRegion();
+					checkPatchState();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 
 	public void checkPatchState() {
 		try {
-            Soundpack pack = (Soundpack) model.getSelectedItem();
-			if (!pack.getArchiveFile().hasBackup()) {
-				ButtonPatch.setEnabled(true);
-				btnUnpatch.setEnabled(false);
+
+			if (manager.getFullLoLPath() != null
+					&& manager.getFullLoLPath().exists()) {
+
+				File soundpack = new File("Soundpacks/"
+						+ (String) model.getSelectedItem());
+				selectedSoundpack = new Soundpack(soundpack,
+						manager.getFullLoLPath());
+				logger.info("Soundpack "+ selectedSoundpack.getName() +" is valid");
+
+				if (!selectedSoundpack.getArchiveFile().hasBackup()) {
+					ButtonPatch.setEnabled(true);
+					btnUnpatch.setEnabled(false);
+				} else {
+					ButtonPatch.setEnabled(false);
+					btnUnpatch.setEnabled(true);
+				}
 			} else {
+				logger.error("No valid League of Legends Path found");
 				ButtonPatch.setEnabled(false);
-				btnUnpatch.setEnabled(true);
+				btnUnpatch.setEnabled(false);
 			}
-		} catch (NullPointerException e1) {
+
+		} catch (NullPointerException | ArchiveException | SoundpackNotValidException e1) {
 			ButtonPatch.setEnabled(false);
-			btnUnpatch.setEnabled(false);
+			btnUnpatch.setEnabled(false);			
 		}
 	}
 
@@ -989,13 +1018,13 @@ public class Gui extends JFrame {
 			}
 
 			private void append(Object s, boolean appender) {
-				if(con != null) {
-                    if (appender) {
-                        con.area.append(s.toString() + "\n");
-                    } else {
-                        con.area.append(s.toString());
-                    }
-                }
+				if (con != null) {
+					if (appender) {
+						con.area.append(s.toString() + "\n");
+					} else {
+						con.area.append(s.toString());
+					}
+				}
 			}
 
 		});
