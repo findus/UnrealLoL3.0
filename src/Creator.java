@@ -20,7 +20,7 @@ public class Creator {
 
     public Creator() throws IOException {
 
-        BufferedReader reader = new BufferedReader(new FileReader("D:\\Dropbox\\Kills.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader("Kills.txt"));
         String lol = null;
         int i = 0;
         while((lol = reader.readLine()) != null)
@@ -41,7 +41,7 @@ public class Creator {
        for(Sound d:list)
        {
 
-           JFileChooser chooser = new JFileChooser("E:\\Dateien\\Desktop\\English\\cleaned");
+           JFileChooser chooser = new JFileChooser("Input");
            chooser.setPreferredSize(new Dimension(1600,1000));
            chooser.setDialogTitle(d.name);
            int rueckgabeWert = chooser.showOpenDialog(null);
@@ -52,7 +52,7 @@ public class Creator {
           for(String s : d.stringList)
           {
               if(chooser.getSelectedFile() != null)
-                Misc.copyFile(chooser.getSelectedFile(), new File("E:\\Dateien\\Desktop\\wwise soundpack ut\\" + s + ".mp3"));
+                Misc.copyFile(chooser.getSelectedFile(), new File("Output\\" + s + ".mp3"));
           }
 
        }

@@ -34,7 +34,7 @@ public class Gui extends JFrame {
 
 	public static boolean fader = true;
 	public static String url;
-	public static final String Version = "3.0.0.1";
+	public static final String Version = "3.0.0.2";
 	public static JLabel headerLabel = new JLabel("JLabel1");
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
