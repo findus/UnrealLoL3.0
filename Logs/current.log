@@ -1,29 +1,21 @@
-2014-11-14 23:26:27,298 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Instantiate ArchiveManager >> Region:English
-2014-11-14 23:26:27,301 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Loading all installed Soundpacks
-2014-11-14 23:26:27,301 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Unreal Tournament added to List
-2014-11-14 23:26:27,301 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Unreal Tournament only Female Voice added to List
-2014-11-14 23:26:27,301 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Unreal Tournament only Male Voice added to List
-2014-11-14 23:26:27,301 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 3 Soundpacks.
-2014-11-14 23:26:27,302 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Trying to switch region to English
-2014-11-14 23:26:27,321 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Region switch: BasePath: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\
-2014-11-14 23:26:27,713 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Instantiate Soundpack: E:\Dateien\Eigene Dokumente\GitHub\UnrealLoL3.0\Soundpacks\Unreal Tournament
-2014-11-14 23:26:27,714 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Loading file: Announcer_Global_Female1_VO_audio.bnk
-2014-11-14 23:26:27,714 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Loading file: Announcer_Global_Female1_VO_audio.wpk
-2014-11-14 23:26:27,715 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Loading file: Announcer_Global_Female1_VO_events.bnk
-2014-11-14 23:26:27,715 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Instantiate new ArchiveFile >> Soundpack: Unreal Tournament
-2014-11-14 23:26:27,716 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Searching for: Announcer_Global_Female1_VO_audio.bnk
-2014-11-14 23:26:27,716 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Gonna search for: Announcer_Global_Female1_VO_audio.bnk in the LoL Filesystem
-2014-11-14 23:26:27,781 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.bnk
-2014-11-14 23:26:27,782 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found in filesystem: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.bnk
-2014-11-14 23:26:27,782 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Searching for: Announcer_Global_Female1_VO_audio.wpk
-2014-11-14 23:26:27,782 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Gonna search for: Announcer_Global_Female1_VO_audio.wpk in the LoL Filesystem
-2014-11-14 23:26:27,851 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.wpk
-2014-11-14 23:26:27,852 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found in filesystem: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.wpk
-2014-11-14 23:26:27,852 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Searching for: Announcer_Global_Female1_VO_events.bnk
-2014-11-14 23:26:27,852 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Gonna search for: Announcer_Global_Female1_VO_events.bnk in the LoL Filesystem
-2014-11-14 23:26:27,919 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_events.bnk
-2014-11-14 23:26:27,920 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found in filesystem: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_events.bnk
-2014-11-14 23:26:27,920 INFO  [RADSSoundPatcher.GUI.Gui] root: Soundpack Unreal Tournament is valid
-2014-11-14 23:26:27,920 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.bnk has Backup: true
-2014-11-14 23:26:27,920 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.wpk has Backup: true
-2014-11-14 23:26:27,920 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_events.bnk has Backup: true
+2014-11-19 23:44:03,179 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Instantiate ArchiveManager >> Region:English
+2014-11-19 23:44:03,181 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Loading all installed Soundpacks
+2014-11-19 23:44:03,182 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Unreal Tournament added to List
+2014-11-19 23:44:03,182 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Loaded 1 Soundpacks.
+2014-11-19 23:44:03,182 INFO  [RADSSoundPatcher.Manager.ArchiveManager] root: Trying to switch region to English
+2014-11-19 23:44:03,206 DEBUG [RADSSoundPatcher.Manager.ArchiveManager] root: Region switch: BasePath: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\
+2014-11-19 23:44:03,664 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Instantiate Soundpack: D:\Dokumente\GitHub\UnrealLoL3.0\Soundpacks\Unreal Tournament
+2014-11-19 23:44:03,664 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Loading file: Announcer_Global_Female1_VO_audio.bnk
+2014-11-19 23:44:03,665 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Loading file: Announcer_Global_Female1_VO_audio.wpk
+2014-11-19 23:44:03,665 DEBUG [RADSSoundPatcher.Manager.Soundpack] root: Loading file: Announcer_Global_Female1_VO_events.bnk
+2014-11-19 23:44:03,670 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Instantiate new ArchiveFile >> Soundpack: Unreal Tournament
+2014-11-19 23:44:03,671 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Gonna search for: Announcer_Global_Female1_VO_audio.bnk in the LoL Filesystem
+2014-11-19 23:44:03,761 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.bnk
+2014-11-19 23:44:03,762 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Gonna search for: Announcer_Global_Female1_VO_audio.wpk in the LoL Filesystem
+2014-11-19 23:44:03,845 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.wpk
+2014-11-19 23:44:03,845 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: Gonna search for: Announcer_Global_Female1_VO_events.bnk in the LoL Filesystem
+2014-11-19 23:44:03,929 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File found: C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_events.bnk
+2014-11-19 23:44:03,929 INFO  [RADSSoundPatcher.GUI.Gui] root: Soundpack Unreal Tournament is valid
+2014-11-19 23:44:03,929 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.bnk has Backup: true
+2014-11-19 23:44:03,929 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_audio.wpk has Backup: true
+2014-11-19 23:44:03,931 DEBUG [RADSSoundPatcher.Manager.ArchiveFile] root: File C:\Riot Games\League of Legends\RADS\projects\lol_game_client_en_gb\managedfiles\0.0.0.226\DATA\Sounds\Wwise\VO\en_US\Shared\Announcer_Global_Female1_VO_events.bnk has Backup: true

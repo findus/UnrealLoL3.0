@@ -33,12 +33,9 @@ public class ArchiveFile {
 		this.pack = pack;
 
 		for (File temp : pack.getSoundpackFiles()) {
-			logger.debug("Searching for: " + temp.getName());
 			File tempFile = searchFiles(basePath, temp.getName());
 
 			if (tempFile != null) {
-				logger.debug("File found in filesystem: "
-						+ tempFile.getAbsolutePath());
 				files.add(tempFile);
 			} else {
 				logger.error(temp.getName()
