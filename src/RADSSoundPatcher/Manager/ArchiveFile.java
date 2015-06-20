@@ -162,8 +162,8 @@ public class ArchiveFile {
 
 	private File searchOtherFiles(File folder, String searchFile) {
 		File retVal = null;
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory() && file != null) {
+		for (File file : reverseArray(folder.listFiles())) {
+			if (file.isDirectory()) {
 				retVal = searchOtherFiles(file, searchFile);
 				if (retVal != null) {
 					return retVal;
@@ -179,5 +179,16 @@ public class ArchiveFile {
 			}
 		}
 		return retVal;
+	}
+
+	public File[] reverseArray(File[] array)
+	{
+		for(int i = 0; i < array.length / 2; i++)
+		{
+			File temp = array[i];
+			array[i] = array[array.length - i - 1];
+			array[array.length - i - 1] = temp;
+		}
+		return array;
 	}
 }
